@@ -4,39 +4,46 @@ const host = "http://192.168.8.101:3300/rsbs/v1/"
 // shoot(x, y, callback)
 // calls strike({x, y})
 
-let shootCB = null;
+export class protocol {
+    constructor(hitCB) {
+        this.hitCB = hitCB
+        this.shootCB = null;
+        this.pollStatus()
+    }
 
-function pollStatus() {
-    fetch(host + "status").then((resp) => {
-        setTimeout(pollStatus, 800)
-        if (resp.ok) {
-            return resp.json()
-        }
-    }).then((m) => {
-        switch (m.status) {
-            case "P":
+    pollStatus = () => {
+        fetch(host + "status").then((resp) => {
+            setTimeout(this.pollStatus, 800)
+            if (resp.ok) {
+                return resp.json()
+            }
+        }).then((m) => {
+            switch (m.status) {
+                case "P":
                 // Pending - nothing to do
-            case "T":
-                strike(cord2xy(m.cell))
-            default:
-                if (shootCB) {
-                    const xy = cord2xy(m.cell);
-                    shootCB(xy[0], xy[1], m.status)
-                }
-        }
-    })
-}
+                case "T":
+                    if (this.hitCB) this.hitCB(cord2xy(m.cell))
+                default:
+                    if (this.shootCB) {
+                        const xy = cord2xy(m.cell);
+                        this.shootCB(xy[0], xy[1], m.status)
+                    }
+            }
+        }).catch((e) => {
+            console.log("Poll error", e)
+            setTimeout(this.pollStatus, 800)
+        })
+    };
 
-pollStatus()
-
-function shoot(x, y, callback) {
-    const regexReply = /(\w)(\d)=(\w)/;
-    fetch({ method: "POST", body: xy2Cord(x, y) }).then((resp) => {
-        if (!resp.ok) {
-            callback(null)
-        }
-        shootCB = callback
-    })
+    Shoot = (x, y, callback) => {
+        const regexReply = /(\w)(\d)=(\w)/;
+        fetch({ method: "POST", body: xy2Cord(x, y) }).then((resp) => {
+            if (!resp.ok) {
+                callback(null)
+            }
+            this.shootCB = callback
+        })
+    }
 }
 
 function xy2Cord(x, y) {
