@@ -12,35 +12,34 @@ const selectLetter = () => {
 };
 
 // Select coordinates to fire at
-const selectCoordinates = () => {
-  const x = selectNum();
-  const y = selectNum();
+const selectCoordinates = previousShots => {
+  let x = selectNum();
+  let y = selectNum();
 
   const target = {
     x,
     y
   };
 
+  // While loop
+
+  // if (previousShots.includes(target)) {
+  //   // Generate new target
+  // } else {
+  //   return target;
+  // }
+
   return target;
 };
 
 // handleHit = (location) => {
-
-//   // do something clever when we hit something
-
+// do something clever when we hit something
 // }
 
 export const fire = (handleResponse, previousShots) => {
-  const target = selectCoordinates(); 
-  if(!previousShots.includes(target)){
-    console.log(`fired at: ${target.x} ${target.y}`);
-    handleResponse(target);
-    // shoot(target.x, target.y, handleResponse);
-  }
-  else{
-    console.log(`select different target`);
-    fire(handleResponse, previousShots);
-  }
+  const target = selectCoordinates(previousShots);
+  handleResponse(target);
+  // shoot(target.x, target.y, handleResponse);
 };
 
 // fire();

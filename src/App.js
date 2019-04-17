@@ -45,7 +45,7 @@ class App extends Component {
   testIncomingHits = () => {
     const testData = [{ x: 2, y: 2 }, { x: 9, y: 4 }, { x: 5, y: 3 }];
     testData.forEach(incomingShotObject => {
-      console.log("response test:", this.returnResponse(incomingShotObject));
+      console.log("response test:", this.handleHit(incomingShotObject));
     });
   };
 
@@ -99,7 +99,11 @@ class App extends Component {
     this.setState({
       ourShotHistory: newShotHistory
     });
-    console.log("our shot history: ", newShotHistory);
+
+    // console.log("our shot history: ", newShotHistory);
+    // if (newShotHistory.length < 5) {
+    //   this.handleFirePressed();
+    // }
   };
 
   handleInitialSetup = () => {
