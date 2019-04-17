@@ -27,8 +27,9 @@ class App extends Component {
     }
     console.log("starting grid", startingGridData);
 
+    this.protocol =new protocol()
+
     this.state = {
-      protocol: new protocol(),
       gridData: startingGridData,
       shipRemainingHits: {
         a: 5,
