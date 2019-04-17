@@ -12,7 +12,7 @@ export class protocol {
     }
 
     pollStatus = () => {
-        fetch(host + "status?team=blue").then((resp) => {
+        fetch(host + "status?source=blue").then((resp) => {
             setTimeout(this.pollStatus, 800)
             if (resp.ok) {
                 return resp.json()
@@ -37,7 +37,7 @@ export class protocol {
 
     Shoot = (x, y, callback) => {
         const regexReply = /(\w)(\d)=(\w)/;
-        fetch({ method: "POST", body: {team:"blue", cell: xy2Cord(x, y), status: "T"}}).then((resp) => {
+        fetch({ method: "POST", body: {source:"blue", cell: xy2Cord(x, y), status: "T"}}).then((resp) => {
             if (!resp.ok) {
                 callback(null)
             }
