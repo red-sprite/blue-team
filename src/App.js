@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import style from "./App.module.css";
+import { getInitialPlacement } from "./initialPlacement";
 
 class App extends Component {
   // Render cells
@@ -15,9 +16,21 @@ class App extends Component {
 
     for (let x = 0; x < 10; x++) {
       for (let y = 0; y < 10; y++) {
-        startingGridData[x][y] = { containsShip: false, isShot: false };
+        startingGridData[x][y] = {
+          containsShip: false,
+          isShot: false,
+          shipId: ""
+        };
       }
     }
+
+    // console.log("initial placement", getInitialPlacement());
+    let ships = getInitialPlacement();
+    ships.forEach(cell => {
+      startingGridData[cell.x][cell.y] = cell;
+    });
+
+    console.log("starting grid", startingGridData);
 
     this.state = {
       gridData: startingGridData,
