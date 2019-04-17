@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import style from "./App.module.css";
 import { getInitialPlacement } from "./initialPlacement";
 import { fire } from "./logic/fireShot";
+import { protocol } from "./protocol";
 
 class App extends Component {
   // Render cells
@@ -27,6 +28,7 @@ class App extends Component {
     console.log("starting grid", startingGridData);
 
     this.state = {
+      protocol: new protocol(),
       gridData: startingGridData,
       shipRemainingHits: {
         a: 5,
