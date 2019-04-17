@@ -22,7 +22,18 @@ export class protocol {
                 case "P":
                 // Pending - nothing to do
                 case "T":
-                    if (this.hitCB) this.hitCB(cord2xy(m.cell))
+                    if (this.hitCB) {
+                        const status = this.hitCB(cord2xy(m.cell));
+                        fetch(host + "target",
+                            {
+                                method: "POST",
+                                body: JSON.stringify({ source: "blue", cell: m.cell, status: "T" }),
+                            }).then((resp) => {
+                                if (!resp.ok) {
+                                    // callback(null)
+                                }
+                            })
+                    }
                 default:
                     if (this.shootCB) {
                         const xy = cord2xy(m.cell);
@@ -37,7 +48,7 @@ export class protocol {
 
     Shoot = (x, y, callback) => {
         const regexReply = /(\w)(\d)=(\w)/;
-        fetch({ method: "POST", body: {source:"blue", cell: xy2Cord(x, y), status: "T"}}).then((resp) => {
+        fetch(host + "target", { method: "POST", body: JSON.stringify({ source: "blue", cell: xy2Cord(x, y), status: "T" }) }).then((resp) => {
             if (!resp.ok) {
                 callback(null)
             }
