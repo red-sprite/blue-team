@@ -10,7 +10,7 @@ class App extends Component {
   constructor() {
     super();
     // This sets up the starting grid. Each cell is populated.
-    // When the Play button is pressed
+    // When the Play button is pressed the ships are positioned.
     let startingGridData = new Array(10);
     for (var i = 0; i < startingGridData.length; i++) {
       startingGridData[i] = new Array(10);
@@ -84,7 +84,6 @@ class App extends Component {
 
   checkIfWeLost = () => {
     const { shipRemainingHits } = this.state;
-    //
   };
 
   handleFirePressed = () => {
