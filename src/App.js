@@ -42,33 +42,47 @@ class App extends Component {
         e: 2
       }
     };
+
+    this.testIncomingHits();
   }
 
   testIncomingHits = () => {
-    const testData = [];
+    const testData = [{ x: 0, y: 0 }, { x: 1, y: 3 }, { x: 5, y: 3 }];
+    testData.forEach(incomingShotObject => {
+      console.log("response test:", this.returnResponse(incomingShotObject));
+    });
   };
 
   returnResponse = incomingShotObject => {
-    // Save their targets?
+    // Save their attempts?
 
     //  object = { x: 0, y: 2 }
     const { x, y } = incomingShotObject;
     let cellHit = this.state.gridData[x][y];
+    let shipId = cellHit.shipId;
     var response = "";
+    var newHitsLeft = 10;
+
     if (cellHit.containsShip) {
-      let shipId = cellHit.shipId;
-      const newHitsLeft = this.state.shipRemainingHits[shipId] - 1;
-
-      const newShipRemainingHits = {
-        ...this.state.shipRemainingHits,
-        [shipId]: newHitsLeft
-      };
-
-      this.setState({ shipRemainingHits: newShipRemainingHits });
+      newHitsLeft = this.state.shipRemainingHits[shipId] - 1;
       response = newHitsLeft === 0 ? "hit and sunk" : "hit";
     } else {
       response = "miss";
     }
+
+    const newShipRemainingHits = {
+      ...this.state.shipRemainingHits,
+      [shipId]: newHitsLeft
+    };
+    // Update the grid
+    let newGridData = [...this.state.gridData];
+    newGridData[x][y] = { ...cellHit, isShot: true };
+
+    this.setState({
+      shipRemainingHits: newShipRemainingHits,
+      gridData: newGridData
+    });
+
     return response;
   };
 
