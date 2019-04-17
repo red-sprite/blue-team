@@ -1,14 +1,20 @@
+// Array to hold results
+let Results = [];
+
+// Select a random number
 const selectNum = () => (
   Math.round(Math.random()*9)
 );
 
+// Convert number to letter
 const selectLetter = () => {
   const letters = [`A`,`B`,`C`,`D`,`E`,`F`,`J`,`H`,`I`,`J`];
   const n = selectNum();
   return(letters[n]);
 };
 
-const fire = () => {
+// Select coordinates to fire at
+const selectCoordinates = () => {
   const x = selectNum();
   const y = selectNum();
 
@@ -21,9 +27,20 @@ const fire = () => {
 
 }
 
-const firedAt = fire();
+const handleResponse = (res) => {
+  console.log(res);
+  Results.push(res);
+}
 
-console.log(firedAt);
+const fire = () => {
+  const target = selectCoordinates();
+  console.log(target);
+  shoot(target.x, target.y, handleResponse);
+}
+
+const fireAt = selectCoordinates();
+
+console.log(fireAt);
 
 
 
