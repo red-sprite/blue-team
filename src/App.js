@@ -39,9 +39,6 @@ class App extends Component {
       },
       ourShotHistory: []
     };
-
-    // TODO: Turn this off when live!
-    // this.testIncomingHits();
   }
 
   testIncomingHits = () => {
@@ -81,6 +78,7 @@ class App extends Component {
       gridData: newGridData
     });
 
+    this.handleFirePressed();
     return response;
   };
 
@@ -91,7 +89,7 @@ class App extends Component {
   handleFirePressed = () => {
     fire(newShots => {
       this.updateShotHistory(newShots);
-    }, console.log("set state after firing:", this.state.ourShotHistory));
+    }, this.state.ourShotHistory);
   };
 
   updateShotHistory = newShots => {
@@ -99,6 +97,7 @@ class App extends Component {
     this.setState({
       ourShotHistory: newShotHistory
     });
+    console.log("our shot history: ", newShotHistory);
   };
 
   handleInitialSetup = () => {
@@ -156,6 +155,7 @@ class App extends Component {
         <div className={style.grid1}>{cells}</div>
         <button onClick={this.handleInitialSetup}>PLAY</button>
         <button onClick={this.handleFirePressed}>START SHOOTING</button>
+        <button onClick={this.testIncomingHits}>TEST</button>
       </main>
     );
   }
