@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import style from "./App.module.css";
 import { getInitialPlacement } from "./initialPlacement";
-import { fire } from "./";
+import { fire } from "./logic/fireShot";
 
 class App extends Component {
   // Render cells
@@ -9,11 +9,12 @@ class App extends Component {
 
   constructor() {
     super();
+    // This sets up the starting grid. Each cell is populated.
+    // When the Play button is pressed
     let startingGridData = new Array(10);
     for (var i = 0; i < startingGridData.length; i++) {
       startingGridData[i] = new Array(10);
     }
-
     for (let x = 0; x < 10; x++) {
       for (let y = 0; y < 10; y++) {
         startingGridData[x][y] = {
@@ -23,7 +24,6 @@ class App extends Component {
         };
       }
     }
-
     console.log("starting grid", startingGridData);
 
     this.state = {
@@ -83,9 +83,14 @@ class App extends Component {
 
   checkIfWeLost = () => {
     const { shipRemainingHits } = this.state;
+    //
   };
 
-  handleFirePressed = () => {};
+  handleFirePressed = () => {
+    fire(object => {
+      this.setState({ shotsFired: object });
+    }, console.log("set state after firing:", this.state.shotsFired));
+  };
 
   handleInitialSetup = () => {
     const updatedGridData = [...this.state.gridData];

@@ -27,20 +27,19 @@ const selectCoordinates = () => {
 
 }
 
-const handleResponse = (res) => {
-  console.log(res);
-  results.push(res);
-  if(results.length < 10) {
-    fire()
-  }
-  
+handleHit = (location) => {
+
+  // do something clever when we hit something
+
 }
 
-const fire = () => {
+export const fire = (handleResponse) => {
   const target = selectCoordinates();
   console.log(`fired at: ${target.x} ${target.y}`);
-  // handleResponse(target);
-  shoot(target.x, target.y, handleResponse);
+  handleResponse(target);
+  // shoot(target.x, target.y, handleResponse);
 }
+
+
 
 // fire();
