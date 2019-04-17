@@ -31,7 +31,9 @@ class App extends Component {
     };
   }
 
-  returnResponse = coordinates => {
+  returnResponse = object => {
+    // object = { x: 0, y: 2 }
+    // Update that
     // Check whether that cell contains a ship
     // If not - return miss
     // If it does -
