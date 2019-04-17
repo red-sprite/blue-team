@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import style from "./App.module.css";
 import { getInitialPlacement } from "./initialPlacement";
+import { fire } from "./";
 
 class App extends Component {
   // Render cells
@@ -8,7 +9,6 @@ class App extends Component {
 
   constructor() {
     super();
-
     let startingGridData = new Array(10);
     for (var i = 0; i < startingGridData.length; i++) {
       startingGridData[i] = new Array(10);
@@ -24,12 +24,6 @@ class App extends Component {
       }
     }
 
-    // console.log("initial placement", getInitialPlacement());
-    let ships = getInitialPlacement();
-    ships.forEach(cell => {
-      startingGridData[cell.x][cell.y] = cell;
-    });
-
     console.log("starting grid", startingGridData);
 
     this.state = {
@@ -43,7 +37,8 @@ class App extends Component {
       }
     };
 
-    this.testIncomingHits();
+    // TODO: Turn this off when live!
+    // this.testIncomingHits();
   }
 
   testIncomingHits = () => {
@@ -84,6 +79,21 @@ class App extends Component {
     });
 
     return response;
+  };
+
+  checkIfWeLost = () => {
+    const { shipRemainingHits } = this.state;
+  };
+
+  handleFirePressed = () => {};
+
+  handleInitialSetup = () => {
+    const updatedGridData = [...this.state.gridData];
+    let ships = getInitialPlacement(0);
+    ships.forEach(cell => {
+      updatedGridData[cell.x][cell.y] = cell;
+    });
+    this.setState({ gridData: updatedGridData });
   };
 
   render() {
@@ -130,6 +140,8 @@ class App extends Component {
       <main className={style.main}>
         <h1>RedSprite Battleships</h1>
         <div className={style.grid1}>{cells}</div>
+        <button onClick={this.handleInitialSetup}>PLAY</button>
+        <button onClick={this.handleFirePressed}>START SHOOTING</button>
       </main>
     );
   }

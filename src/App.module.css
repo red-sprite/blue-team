@@ -8,6 +8,18 @@
     background-color: #F7f7f7
 }
 
+.main button {
+    height: 32px;
+  padding: 0 20px;
+    background-color: black;
+    color: #F7f7f7;
+    font-size: 20px;
+    border: none; 
+    outline:none;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
 .cell {
     border: 1px solid;
 }
