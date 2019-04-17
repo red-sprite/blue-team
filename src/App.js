@@ -47,7 +47,7 @@ class App extends Component {
   }
 
   testIncomingHits = () => {
-    const testData = [{ x: 0, y: 0 }, { x: 1, y: 3 }, { x: 5, y: 3 }];
+    const testData = [{ x: 2, y: 2 }, { x: 9, y: 4 }, { x: 5, y: 3 }];
     testData.forEach(incomingShotObject => {
       console.log("response test:", this.returnResponse(incomingShotObject));
     });
@@ -128,7 +128,7 @@ class App extends Component {
 
     return (
       <main className={style.main}>
-        <h1>RedStripe Battleships</h1>
+        <h1>RedSprite Battleships</h1>
         <div className={style.grid1}>{cells}</div>
       </main>
     );
