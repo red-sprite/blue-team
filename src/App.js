@@ -44,13 +44,32 @@ class App extends Component {
     };
   }
 
-  returnResponse = object => {
-    // object = { x: 0, y: 2 }
-    // Update that
-    // Check whether that cell contains a ship
-    // If not - return miss
-    // If it does -
-    // deduct one from the shipRemainingHits from relevant hits.
+  testIncomingHits = () => {
+    const testData = [];
+  };
+
+  returnResponse = incomingShotObject => {
+    // Save their targets?
+
+    //  object = { x: 0, y: 2 }
+    const { x, y } = incomingShotObject;
+    let cellHit = this.state.gridData[x][y];
+    var response = "";
+    if (cellHit.containsShip) {
+      let shipId = cellHit.shipId;
+      const newHitsLeft = this.state.shipRemainingHits[shipId] - 1;
+
+      const newShipRemainingHits = {
+        ...this.state.shipRemainingHits,
+        [shipId]: newHitsLeft
+      };
+
+      this.setState({ shipRemainingHits: newShipRemainingHits });
+      response = newHitsLeft === 0 ? "hit and sunk" : "hit";
+    } else {
+      response = "miss";
+    }
+    return response;
   };
 
   render() {
