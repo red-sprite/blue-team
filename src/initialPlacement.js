@@ -1,12 +1,4 @@
-var getInitialPlacement = function(){
-    var returnArray = [];
-    returnArray.concat(getCarrierSquares());
-    returnArray.concat(getBattleshipSquares());
-    returnArray.concat(getDestroyerSquares());
-    returnArray.concat(getSubmarineSquares());
-    returnArray.concat(getPatrolBoatSquares());
-    return returnArray;
-}
+
 //x should be numeric
 //y should be alphabetical
 //hasShip should be boolean
@@ -14,7 +6,7 @@ var getInitialPlacement = function(){
 var createGridSquare = function(x,y,hasShip,isShot, shipId){
     var gridSquare = new Object();
     gridSquare.x = x;
-    gridsquare.y = y;
+    gridSquare.y = y;
     gridSquare.containsShip = hasShip;
     gridSquare.isShot = isShot;
     gridSquare.shipId = shipId;
@@ -70,5 +62,15 @@ var getPatrolBoatSquares = function()
     var returnArray = [];
     returnArray.push(createGridSquare(5,1,true,false, id));
     returnArray.push(createGridSquare(5,2,true,false, id));
+    return returnArray;
+}
+
+var getInitialPlacement = function(){
+    var returnArray = [];
+    returnArray.concat(getCarrierSquares());
+    returnArray.concat(getBattleshipSquares());
+    returnArray.concat(getDestroyerSquares());
+    returnArray.concat(getSubmarineSquares());
+    returnArray.concat(getPatrolBoatSquares());
     return returnArray;
 }
