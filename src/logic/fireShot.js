@@ -1,5 +1,5 @@
 // Array to hold results
-let Results = [];
+let results = [];
 
 // Select a random number
 const selectNum = () => (
@@ -29,7 +29,11 @@ const selectCoordinates = () => {
 
 const handleResponse = (res) => {
   console.log(res);
-  Results.push(res);
+  results.push(res);
+  if(results.length < 10) {
+    fire()
+  }
+  
 }
 
 const fire = () => {
