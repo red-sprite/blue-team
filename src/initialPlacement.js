@@ -5,7 +5,6 @@ var getInitialPlacement = function(){
     returnArray.concat(getDestroyerSquares());
     returnArray.concat(getSubmarineSquares());
     returnArray.concat(getPatrolBoatSquares());
-
     return returnArray;
 }
 //x should be numeric
