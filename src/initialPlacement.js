@@ -19,6 +19,13 @@ var getCarrierSquares = function(formation = 0)
     var id = "A";
     var returnArray = [];
     switch(formation) {
+        case 2:
+            returnArray = returnArray.concat(createGridSquare(9,1,true,false, id));
+            returnArray = returnArray.concat(createGridSquare(9,2,true,false, id));
+            returnArray = returnArray.concat(createGridSquare(9,3,true,false, id));
+            returnArray = returnArray.concat(createGridSquare(9,4,true,false, id));
+            returnArray = returnArray.concat(createGridSquare(9,5,true,false, id));
+            break;
         case 1:
             returnArray = returnArray.concat(createGridSquare(9,5,true,false, id));
             returnArray = returnArray.concat(createGridSquare(9,6,true,false, id));
@@ -44,6 +51,12 @@ var getBattleshipSquares = function(formation = 0)
     var returnArray = [];
 
     switch(formation) {
+        case 2:
+            returnArray = returnArray.concat(createGridSquare(0,2,true,false, id));
+            returnArray = returnArray.concat(createGridSquare(0,3,true,false, id));
+            returnArray = returnArray.concat(createGridSquare(0,4,true,false, id));
+            returnArray = returnArray.concat(createGridSquare(0,5,true,false, id));
+            break;
         case 1:
             returnArray = returnArray.concat(createGridSquare(8,6,true,false, id));
             returnArray = returnArray.concat(createGridSquare(8,7,true,false, id));
@@ -66,6 +79,11 @@ var getDestroyerSquares = function(formation = 0)
     var id = "C";
     var returnArray = [];
     switch(formation) {
+        case 2:
+            returnArray = returnArray.concat(createGridSquare(6,4,true,false, id));
+            returnArray = returnArray.concat(createGridSquare(6,5,true,false, id));
+            returnArray = returnArray.concat(createGridSquare(6,6,true,false, id));
+            break;
         case 1:
             returnArray = returnArray.concat(createGridSquare(7,7,true,false, id));
             returnArray = returnArray.concat(createGridSquare(7,8,true,false, id));
@@ -87,6 +105,11 @@ var getSubmarineSquares = function(formation = 0)
     var returnArray = [];
 
     switch(formation) {
+        case 2:
+            returnArray = returnArray.concat(createGridSquare(0,0,true,false, id));
+            returnArray = returnArray.concat(createGridSquare(0,1,true,false, id));
+            returnArray = returnArray.concat(createGridSquare(0,2,true,false, id));
+            break;
         case 1:
             returnArray = returnArray.concat(createGridSquare(6,7,true,false, id));
             returnArray = returnArray.concat(createGridSquare(6,8,true,false, id));
@@ -108,6 +131,10 @@ var getPatrolBoatSquares = function(formation = 0)
     var returnArray = [];
 
     switch(formation) {
+        case 2:
+            returnArray = returnArray.concat(createGridSquare(8,9,true,false, id));
+            returnArray = returnArray.concat(createGridSquare(9,9,true,false, id));
+            break;
         case 1:
             returnArray = returnArray.concat(createGridSquare(5,8,true,false, id));
             returnArray = returnArray.concat(createGridSquare(5,9,true,false, id));
@@ -121,6 +148,7 @@ var getPatrolBoatSquares = function(formation = 0)
 
     return returnArray;
 }
+
 export const getInitialPlacement = (formation = 0) => {
   var returnArray = [];
   returnArray = returnArray.concat(getCarrierSquares(formation));

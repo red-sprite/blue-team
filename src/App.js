@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import style from "./App.module.css";
 import { getInitialPlacement } from "./initialPlacement";
+import { fire } from "./";
 
 class App extends Component {
   // Render cells
@@ -8,7 +9,6 @@ class App extends Component {
 
   constructor() {
     super();
-
     let startingGridData = new Array(10);
     for (var i = 0; i < startingGridData.length; i++) {
       startingGridData[i] = new Array(10);
@@ -24,12 +24,6 @@ class App extends Component {
       }
     }
 
-    // console.log("initial placement", getInitialPlacement());
-    let ships = getInitialPlacement();
-    ships.forEach(cell => {
-      startingGridData[cell.x][cell.y] = cell;
-    });
-
     console.log("starting grid", startingGridData);
 
     this.state = {
@@ -43,11 +37,12 @@ class App extends Component {
       }
     };
 
-    this.testIncomingHits();
+    // TODO: Turn this off when live!
+    // this.testIncomingHits();
   }
 
   testIncomingHits = () => {
-    const testData = [{ x: 0, y: 0 }, { x: 1, y: 3 }, { x: 5, y: 3 }];
+    const testData = [{ x: 2, y: 2 }, { x: 9, y: 4 }, { x: 5, y: 3 }];
     testData.forEach(incomingShotObject => {
       console.log("response test:", this.returnResponse(incomingShotObject));
     });
@@ -84,6 +79,21 @@ class App extends Component {
     });
 
     return response;
+  };
+
+  checkIfWeLost = () => {
+    const { shipRemainingHits } = this.state;
+  };
+
+  handleFirePressed = () => {};
+
+  handleInitialSetup = () => {
+    const updatedGridData = [...this.state.gridData];
+    let ships = getInitialPlacement(0);
+    ships.forEach(cell => {
+      updatedGridData[cell.x][cell.y] = cell;
+    });
+    this.setState({ gridData: updatedGridData });
   };
 
   render() {
@@ -128,8 +138,10 @@ class App extends Component {
 
     return (
       <main className={style.main}>
-        <h1>RedStripe Battleships</h1>
+        <h1>RedSprite Battleships</h1>
         <div className={style.grid1}>{cells}</div>
+        <button onClick={this.handleInitialSetup}>PLAY</button>
+        <button onClick={this.handleFirePressed}>START SHOOTING</button>
       </main>
     );
   }

@@ -1,45 +1,49 @@
 
-const host = "127.0.0.1"
+const host = "http://192.168.8.101:3300/rsbs/v1/"
 
 // shoot(x, y, callback)
 // calls strike({x, y})
 
-const allowStrike = true;
-
-function pollForStrikes() {
-    if (allowStrike) {
-        fetch(host).then((resp) => {
-            setTimeout(pollForStrikes, 800)
-            if (resp.ok) {
-                return resp.text()
-            }
-        }).then((body) => {
-            strike(cord2xy(body))
-        })
-    } else {
-        setTimeout(pollForStrikes, 800)
+export class protocol {
+    constructor(hitCB) {
+        this.hitCB = hitCB
+        this.shootCB = null;
+        this.pollStatus()
     }
-}
 
-// Listen for strikes
-pollForStrikes()
+    pollStatus = () => {
+        fetch(host + "status").then((resp) => {
+            setTimeout(this.pollStatus, 800)
+            if (resp.ok) {
+                return resp.json()
+            }
+        }).then((m) => {
+            switch (m.status) {
+                case "P":
+                // Pending - nothing to do
+                case "T":
+                    if (this.hitCB) this.hitCB(cord2xy(m.cell))
+                default:
+                    if (this.shootCB) {
+                        const xy = cord2xy(m.cell);
+                        this.shootCB(xy[0], xy[1], m.status)
+                    }
+            }
+        }).catch((e) => {
+            console.log("Poll error", e)
+            setTimeout(this.pollStatus, 800)
+        })
+    };
 
-function shoot(x, y, callback) {
-    const regexReply = /(\w)(\d)=(\w)/;
-    fetch({ method: "POST", body: xy2Cord(x, y) }).then(() => {
-        for (const i = 0; i < 10; i++) {
-            setTimeout(fetch(host).then((resp) => {
-                if (resp.ok) {
-                    return resp.text();
-                }
-            }).then((body) => {
-                const m = regexReply.exec(body)
-                if (m) {
-                    callback(m[0], m[1].charCodeAt(0) - 65, m[2]);
-                }
-            }), 1000)
-        }
-    })
+    Shoot = (x, y, callback) => {
+        const regexReply = /(\w)(\d)=(\w)/;
+        fetch({ method: "POST", body: xy2Cord(x, y) }).then((resp) => {
+            if (!resp.ok) {
+                callback(null)
+            }
+            this.shootCB = callback
+        })
+    }
 }
 
 function xy2Cord(x, y) {
