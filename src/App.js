@@ -5,9 +5,6 @@ import { fire } from "./logic/fireShot";
 import { protocol } from "./protocol";
 
 class App extends Component {
-  // Render cells
-  // Each cell has a state.
-
   constructor() {
     super();
     // This sets up the starting grid. Each cell is populated.
@@ -61,7 +58,7 @@ class App extends Component {
 
     if (cellHit.containsShip) {
       newHitsLeft = this.state.shipRemainingHits[shipId] - 1;
-      // Sunk or Miss
+      // Sunk or Hit
       response = newHitsLeft === 0 ? "S" : "H";
     } else {
       // Miss
@@ -80,7 +77,6 @@ class App extends Component {
       gridData: newGridData
     });
 
-    this.handleFirePressed();
     return response;
   };
 
@@ -141,19 +137,6 @@ class App extends Component {
         );
       });
     });
-
-    // const shipId = "id";
-    // const containsShip = true;
-    // const isHit = false;
-
-    // let cell = (
-    //   <div
-    //     className={style.cell}
-    //     style={{
-    //       backgroundColor: containsShip ? (isHit ? "red" : "blue") : "white"
-    //     }}
-    //   />
-    // );
 
     return (
       <main className={style.main}>
