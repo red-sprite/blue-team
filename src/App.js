@@ -5,34 +5,31 @@ class App extends Component {
   // Render cells
   // Each cell has a state.
 
-  state = {
-    gridData: [
-      [
-        { containsShip: false },
-        { containsShip: true },
-        { containsShip: false }
-      ],
-      [
-        { containsShip: false },
-        { containsShip: true },
-        { containsShip: false }
-      ],
-      [
-        { containsShip: false },
-        { containsShip: true, isShot: true },
-        { containsShip: false }
-      ]
-    ],
+  constructor() {
+    super();
 
-    //
-    shipRemainingHits: {
-      a: 5,
-      b: 4,
-      c: 3,
-      d: 3,
-      e: 2
+    let startingGridData = new Array(10);
+    for (var i = 0; i < startingGridData.length; i++) {
+      startingGridData[i] = new Array(10);
     }
-  };
+
+    for (let x = 0; x < 10; x++) {
+      for (let y = 0; y < 10; y++) {
+        startingGridData[x][y] = { containsShip: false, isShot: false };
+      }
+    }
+
+    this.state = {
+      gridData: startingGridData,
+      shipRemainingHits: {
+        a: 5,
+        b: 4,
+        c: 3,
+        d: 3,
+        e: 2
+      }
+    };
+  }
 
   returnResponse = coordinates => {
     // Check whether that cell contains a ship
@@ -91,3 +88,30 @@ class App extends Component {
 }
 
 export default App;
+
+// gridData: [
+//   [
+//     { containsShip: false, isShot: false },
+//     { containsShip: false, isShot: false },
+//     { containsShip: false, isShot: false },
+//     { containsShip: false, isShot: false },
+//     { containsShip: false, isShot: false },
+//     { containsShip: false, isShot: false },
+//     { containsShip: false, isShot: false },
+//     { containsShip: false, isShot: false },
+//     { containsShip: false, isShot: false },
+//     { containsShip: false, isShot: false }
+//   ],
+//   [
+//     { containsShip: false, isShot: false },
+//     { containsShip: false, isShot: false },
+//     { containsShip: false, isShot: false }
+//   ],
+//   [
+//     { containsShip: false, isShot: false },
+//     { containsShip: false, isShot: false },
+//     { containsShip: false, isShot: false }
+//   ]
+// ],
+
+//
