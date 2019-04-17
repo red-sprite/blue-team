@@ -30,11 +30,17 @@ const selectCoordinates = () => {
 
 // }
 
-export const fire = handleResponse => {
-  const target = selectCoordinates();
-  console.log(`fired at: ${target.x} ${target.y}`);
-  handleResponse(target);
-  // shoot(target.x, target.y, handleResponse);
+export const fire = (handleResponse, previousShots) => {
+  const target = selectCoordinates(); 
+  if(!previousShots.includes(target)){
+    console.log(`fired at: ${target.x} ${target.y}`);
+    handleResponse(target);
+    // shoot(target.x, target.y, handleResponse);
+  }
+  else{
+    console.log(`select different target`);
+    fire(handleResponse, previousShots);
+  }
 };
 
 // fire();
