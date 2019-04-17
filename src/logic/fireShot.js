@@ -38,15 +38,9 @@ const handleResponse = (res) => {
 
 const fire = () => {
   const target = selectCoordinates();
-  console.log(target);
+  console.log(`fired at: ${target.x} ${target.y}`);
+  // handleResponse(target);
   shoot(target.x, target.y, handleResponse);
 }
 
-const fireAt = selectCoordinates();
-
-console.log(fireAt);
-
-
-
-
-
+// fire();
