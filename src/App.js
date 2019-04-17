@@ -27,7 +27,7 @@ class App extends Component {
     }
     console.log("starting grid", startingGridData);
 
-    this.protocol =new protocol()
+    this.protocol = new protocol(this.handleHit);
 
     this.state = {
       gridData: startingGridData,
@@ -49,7 +49,7 @@ class App extends Component {
     });
   };
 
-  returnResponse = incomingShotObject => {
+  handleHit = incomingShotObject => {
     // Save their attempts?
 
     //  object = { x: 0, y: 2 }
@@ -61,11 +61,12 @@ class App extends Component {
 
     if (cellHit.containsShip) {
       newHitsLeft = this.state.shipRemainingHits[shipId] - 1;
-      response = newHitsLeft === 0 ? "hit and sunk" : "hit";
+      // Sunk or Miss
+      response = newHitsLeft === 0 ? "S" : "H";
     } else {
-      response = "miss";
+      // Miss
+      response = "M";
     }
-
     const newShipRemainingHits = {
       ...this.state.shipRemainingHits,
       [shipId]: newHitsLeft
