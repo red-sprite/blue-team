@@ -34,7 +34,8 @@ class App extends Component {
         c: 3,
         d: 3,
         e: 2
-      }
+      },
+      ourShotHistory: []
     };
 
     // TODO: Turn this off when live!
@@ -87,9 +88,16 @@ class App extends Component {
   };
 
   handleFirePressed = () => {
-    fire(object => {
-      this.setState({ shotsFired: object });
-    }, console.log("set state after firing:", this.state.shotsFired));
+    fire(newShots => {
+      this.updateShotHistory(newShots);
+    }, console.log("set state after firing:", this.state.ourShotHistory));
+  };
+
+  updateShotHistory = newShots => {
+    let newShotHistory = [...this.state.ourShotHistory, newShots];
+    this.setState({
+      ourShotHistory: newShotHistory
+    });
   };
 
   handleInitialSetup = () => {
