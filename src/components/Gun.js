@@ -26,18 +26,22 @@ export default class Gun extends Component {
   handleFireResponse = res => {
     // TODO: do something with the response
     console.log(res);
+    this.setState({
+      ...this.state,
+      hits: [...this.state.hits, res],
+    })
   }
 
   fire = () => {
     const target = this.selectCoordinates();
-    handleResponse(target);
+    this.handleFireResponse(target);
     // shoot(target.x, target.y, handleResponse);
   };
 
   render() {
     return (
       <div>
-        <button conClick={this.fire()}>Fire Test Shot</button>
+        <button onClick={this.fire}>Fire Test Shot</button>
       </div>
     )
   }
