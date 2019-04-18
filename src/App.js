@@ -3,6 +3,7 @@ import style from "./App.module.css";
 import { getInitialPlacement } from "./initialPlacement";
 import { fire } from "./logic/fireShot";
 import { protocol } from "./protocol";
+import Gun from './components/Gun';
 
 class App extends Component {
   constructor() {
@@ -130,8 +131,8 @@ class App extends Component {
                   ? "red"
                   : "grey"
                 : cell.isShot
-                ? "white"
-                : "blue"
+                  ? "white"
+                  : "blue"
             }}
           />
         );
@@ -145,6 +146,7 @@ class App extends Component {
         <button onClick={this.handleInitialSetup}>PLAY</button>
         <button onClick={this.handleFirePressed}>START SHOOTING</button>
         <button onClick={this.testIncomingHits}>TEST</button>
+        <Gun />
       </main>
     );
   }
