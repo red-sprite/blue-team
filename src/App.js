@@ -1,6 +1,7 @@
 import React, { Component } from "react";
+import { TweenMax } from "gsap/all";
 import style from "./App.module.css";
-import { getInitialPlacement } from "./initialPlacement";
+import { getInitialPlacement } from "./logic/initialPlacement";
 import { fire } from "./logic/fireShot";
 import { protocol } from "./protocol";
 import Gun from "./components/Gun";
@@ -8,11 +9,7 @@ import Gun from "./components/Gun";
 class App extends Component {
   constructor() {
     super();
-    // This sets up the starting grid. Each cell is populated.
-    // When the Play button is pressed the ships are positioned.
-
     this.protocol = new protocol(this.handleHit);
-
     this.state = {
       gridData: this.returnStartingGridData(),
       shipRemainingHits: {
@@ -44,11 +41,11 @@ class App extends Component {
     return startingGridData;
   };
 
-  testIncomingHits = () => {
-    const testData = [{ x: 2, y: 2 }, { x: 9, y: 4 }, { x: 5, y: 3 }];
-    testData.forEach(incomingShotObject => {
-      console.log("response test:", this.handleHit(incomingShotObject));
-    });
+  testIncomingShot = () => {
+    const randomX = Math.round(Math.random() * 9);
+    const randomY = Math.round(Math.random() * 9);
+    const testData = { x: randomX, y: randomY };
+    this.handleHit(testData);
   };
 
   handleHit = incomingShotObject => {
@@ -82,8 +79,20 @@ class App extends Component {
       gridData: newGridData
     });
 
+    this.displayShotEffect(x, y);
     this.checkIfWeLost();
     return response;
+  };
+
+  displayShotEffect = (x, y) => {
+    const cellId = "#cell" + x + "" + y;
+    TweenMax.to(cellId, 0.3, {
+      zIndex: 10,
+      borderRadius: "50%",
+      scale: 1.4,
+      yoyo: true,
+      repeat: 1
+    });
   };
 
   checkIfWeLost = () => {
@@ -149,10 +158,12 @@ class App extends Component {
 
     const { gridData, weLost } = this.state;
 
-    let cells = gridData.map(row => {
-      return row.map(cell => {
+    let cells = gridData.map((row, colIndex) => {
+      return row.map((cell, rowIndex) => {
+        // console.log(colIndex + "" + rowIndex);
         return (
           <div
+            id={"cell" + colIndex + "" + rowIndex}
             className={style.cell}
             style={{
               backgroundColor: cell.containsShip
@@ -180,7 +191,7 @@ class App extends Component {
           <button onClick={this.placeOurShips}>PLACE SHIPS</button>
           {weLost && <button onClick={this.resetBoard}>RESET</button>}
           <button onClick={this.handleFirePressed}>BEGIN SHOOTING</button>
-          <button onClick={this.testIncomingHits}>TEST INCOMING SHOTS</button>
+          <button onClick={this.testIncomingShot}>TEST INCOMING SHOT</button>
         </div>
         <Gun />
       </main>
