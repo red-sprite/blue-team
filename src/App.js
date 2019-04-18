@@ -9,6 +9,24 @@ class App extends Component {
     super();
     // This sets up the starting grid. Each cell is populated.
     // When the Play button is pressed the ships are positioned.
+
+    this.protocol = new protocol(this.handleHit);
+
+    this.state = {
+      gridData: this.returnStartingGridData(),
+      shipRemainingHits: {
+        a: 5,
+        b: 4,
+        c: 3,
+        d: 3,
+        e: 2
+      },
+      ourShotHistory: [],
+      weLost: false
+    };
+  }
+
+  returnStartingGridData = () => {
     let startingGridData = new Array(10);
     for (var i = 0; i < startingGridData.length; i++) {
       startingGridData[i] = new Array(10);
@@ -22,22 +40,8 @@ class App extends Component {
         };
       }
     }
-    console.log("starting grid", startingGridData);
-
-    this.protocol = new protocol(this.handleHit);
-
-    this.state = {
-      gridData: startingGridData,
-      shipRemainingHits: {
-        a: 5,
-        b: 4,
-        c: 3,
-        d: 3,
-        e: 2
-      },
-      ourShotHistory: []
-    };
-  }
+    return startingGridData;
+  };
 
   testIncomingHits = () => {
     const testData = [{ x: 2, y: 2 }, { x: 9, y: 4 }, { x: 5, y: 3 }];
@@ -77,11 +81,20 @@ class App extends Component {
       gridData: newGridData
     });
 
+    this.checkIfWeLost();
     return response;
   };
 
   checkIfWeLost = () => {
     const { shipRemainingHits } = this.state;
+    let weLost = true;
+    Object.entries(shipRemainingHits).forEach(([shipId, value]) => {
+      if (value > 0) {
+        weLost = false;
+      }
+    });
+    console.log("have we lost?", weLost);
+    this.setState({ weLost: weLost });
   };
 
   handleFirePressed = () => {
@@ -102,13 +115,29 @@ class App extends Component {
     // }
   };
 
-  handleInitialSetup = () => {
+  placeOurShips = () => {
     const updatedGridData = [...this.state.gridData];
-    let ships = getInitialPlacement(0);
+    let ships = getInitialPlacement(2);
     ships.forEach(cell => {
       updatedGridData[cell.x][cell.y] = cell;
     });
     this.setState({ gridData: updatedGridData });
+  };
+
+  resetBoard = () => {
+    const emptyState = {
+      gridData: this.returnStartingGridData(),
+      shipRemainingHits: {
+        a: 5,
+        b: 4,
+        c: 3,
+        d: 3,
+        e: 2
+      },
+      ourShotHistory: [],
+      weLost: false
+    };
+    this.setState({ ...emptyState });
   };
 
   render() {
@@ -117,7 +146,7 @@ class App extends Component {
     // Ship
     // Ship Hit
 
-    const { gridData } = this.state;
+    const { gridData, weLost } = this.state;
 
     let cells = gridData.map(row => {
       return row.map(cell => {
@@ -140,11 +169,18 @@ class App extends Component {
 
     return (
       <main className={style.main}>
-        <h1>RedSprite Battleships</h1>
-        <div className={style.grid1}>{cells}</div>
-        <button onClick={this.handleInitialSetup}>PLAY</button>
-        <button onClick={this.handleFirePressed}>START SHOOTING</button>
-        <button onClick={this.testIncomingHits}>TEST</button>
+        <h1>{weLost ? "GAME OVER - We Lost" : "RedSprite Battleships"}</h1>
+
+        <div style={{ opacity: weLost ? 0.2 : 1 }} className={style.grid1}>
+          {cells}
+        </div>
+
+        <div className={style.controls}>
+          <button onClick={this.placeOurShips}>PLACE SHIPS</button>
+          {weLost && <button onClick={this.resetBoard}>RESET</button>}
+          <button onClick={this.handleFirePressed}>BEGIN SHOOTING</button>
+          <button onClick={this.testIncomingHits}>TEST INCOMING SHOTS</button>
+        </div>
       </main>
     );
   }
