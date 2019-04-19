@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import _ from 'lodash';
 
 export default class Gun extends Component {
 
@@ -107,26 +108,24 @@ export default class Gun extends Component {
     ]
   }
 
-  // Select a random number from 0 to 9
-  selectNum = () => Math.round(Math.random() * 9);
-
   // Select target
-  selectCoordinates = () => {
+  selectTarget = () => {
 
-    let x = this.selectNum();
-    let y = this.selectNum();
+    // Find highest priority value of across all targets
+    const priority = Math.max.apply(Math, this.state.targets.map(target => (target.priority)));
 
-    const target = {
-      x,
-      y
-    };
+    // Select highest priority targets
+    const priorityTargets = _.filter(this.state.targets, { 'priority': priority });
+
+    // Select specific target at random
+    const target = priorityTargets[Math.floor(Math.random() * priorityTargets.length)];
 
     return target;
+
   }
 
   handleFireResponse = res => {
     // TODO: do something with the response
-    console.log(res);
 
     const shot = res;
 
@@ -147,7 +146,7 @@ export default class Gun extends Component {
   }
 
   fire = () => {
-    const target = this.selectCoordinates();
+    const target = this.selectTarget();
     this.handleFireResponse(target);
     // shoot(target.x, target.y, handleResponse);
   };
