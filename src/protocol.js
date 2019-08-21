@@ -1,73 +1,73 @@
+import axios from 'axios';
 
-const host = "http://192.168.8.101:3300/rsbs/v1/"
+const host = 'http://192.168.43.207:5000/rsbs/v1';
 
 // shoot(x, y, callback)
 // calls strike({x, y})
 
 export class protocol {
-    constructor(hitCB) {
-        this.hitCB = hitCB
-        this.shootCB = null;
-        this.pollStatus()
-    }
+	constructor(hitCB, shootCB) {
+		this.hitCB = hitCB;
+		this.shootCB = shootCB;
+		// this.pollStatus();
+		console.log('constructor');
+		setInterval(() => this.pollStatus(), 2000);
+	}
 
-    pollStatus = () => {
-        fetch(host + "status?source=blue").then((resp) => {
-            setTimeout(this.pollStatus, 800)
-            if (resp.ok) {
-                return resp.json()
-            }
-        }).then((m) => {
-            switch (m.status) {
-                case "P":
-                // Pending - nothing to do
-                case "T":
-                    if (this.hitCB) {
-                        const status = this.hitCB(cord2xy(m.cell));
-                        fetch(host + "target",
-                            {
-                                method: "POST",
-                                body: JSON.stringify({ source: "blue", cell: m.cell, status: "T" }),
-                            }).then((resp) => {
-                                if (!resp.ok) {
-                                    // callback(null)
-                                }
-                            })
-                    }
-                default:
-                    if (this.shootCB) {
-                        const xy = cord2xy(m.cell);
-                        this.shootCB(xy[0], xy[1], m.status)
-                    }
-            }
-        }).catch((e) => {
-            console.log("Poll error", e)
-            setTimeout(this.pollStatus, 800)
-        })
-    };
+	pollStatus = () => {
+		console.log('poll status');
+		axios
+			.get(host + '/status/?source=blue')
+			.then(response => {
+				switch (response.data.status) {
+					case 'P':
+						console.log('status Pending');
+						// Pending - nothing to do
+						break;
+					case 'T':
+						console.log('status Targetted');
 
-    Shoot = (x, y, callback) => {
-        const regexReply = /(\w)(\d)=(\w)/;
-        fetch(host + "target", { method: "POST", body: JSON.stringify({ source: "blue", cell: xy2Cord(x, y), status: "T" }) }).then((resp) => {
-            if (!resp.ok) {
-                callback(null)
-            }
-            this.shootCB = callback
-        })
-    }
+						const status = this.hitCB(cord2xy(response.data.cell));
+						console.log('hit cb status', status);
+						axios.post(host + '/status/', {
+							source: 'blue',
+							status: status,
+							cell: response.data.cell
+						});
+
+						break;
+					default:
+						console.log('status Attack');
+						const shotLocation = this.shootCB();
+						console.log('shotLocation:', shotLocation);
+						const cords = xy2Cord(shotLocation.y, shotLocation.x);
+
+						axios.post(host + '/target/', {
+							source: 'blue',
+							cell: cords
+						});
+
+						break;
+				}
+				console.log(response);
+			})
+			.catch(function(error) {
+				// handle error
+				console.log(error);
+			});
+	};
 }
 
-function xy2Cord(x, y) {
-    return (x + 1) + String.fromCharCode(y + 1)
+function xy2Cord(y, x) {
+	console.log('xy2Cord', String.fromCharCode(y + 65) + (x + 1));
+	return String.fromCharCode(y + 65) + (x + 1);
 }
 
 function cord2xy(cord) {
-    const regexCord = /(\w)(\d)/;
-    const m = regexCord.exec(cord)
-    if (m) {
-        return {
-            x: m[0],
-            y: m[1].charCodeAt(0) - 65,
-        }
-    }
+	const xY = {
+		x: cord.substr(1) - 1,
+		y: cord.charCodeAt(0) - 65
+	};
+	console.log(xY);
+	return xY;
 }
